@@ -23,7 +23,7 @@ test('Edge Case: light-only theme constraints are enforced', () => {
   assert.match(html, /<html lang="ko">/);
   assert.match(html, /Jaehyuk Song \/\/ AI PoC Builder/);
   assert.match(html, /I shape <span class="text-secondary">ideas<\/span> into systems that <span class="text-secondary">work<\/span>\./);
-  assert.match(html, /From real workflows to RAG and orchestration, I design the flow, guide the build, and validate what works\./);
+  assert.match(html, /저는 아이디어를 구조화하고, 구현을 이끌며, 작동하는 결과로 증명합니다\./);
   assert.match(html, /background-color:\s*#f7fafc;/);
   assert.doesNotMatch(html, /darkMode\s*:/);
   assert.doesNotMatch(html, /\bdark:/);
@@ -74,6 +74,8 @@ test('Happy Path: project data and cards cover all case studies', () => {
     assert.ok(assetExists(srcMatch[1]), `${srcMatch[1]} should exist`);
     assert.ok(altMatch[1].length >= 12, `${cardIds[index]} card should have useful image alt text`);
     assert.match(cardHtml, /onerror="handleImageError\(this\)"/);
+    assert.match(cardHtml, /View Case Study/);
+    assert.match(cardHtml, /arrow_forward/);
   }
 
   for (const project of projects) {
