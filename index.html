@@ -168,18 +168,18 @@
             </div>
             <nav class="hidden md:flex items-center gap-stack-lg">
                 <a class="font-body-md text-body-md text-secondary border-b-2 border-secondary pb-1 cursor-pointer transition-all"
-                    href="#">SOLUTIONS</a>
+                    href="#projects">PROJECTS</a>
                 <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer"
-                    href="#">PROCESS</a>
+                    href="#process">PROCESS</a>
                 <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer"
-                    href="#">STACK</a>
+                    href="#stack">STACK</a>
                 <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer"
-                    href="#">PORTFOLIO</a>
+                    href="#implementation-note">NOTE</a>
             </nav>
-            <button
+            <a href="#projects"
                 class="font-label-caps text-label-caps bg-primary text-on-primary px-stack-md py-3 hover:bg-secondary transition-colors duration-200 active:opacity-70 uppercase tracking-widest">
-                CONTACT ME
-            </button>
+                VIEW WORK
+            </a>
         </div>
     </header>
     <main>
@@ -306,19 +306,51 @@
                 </button>
             </div>
         </section>
-        <section id="process" class="max-w-[1200px] mx-auto px-margin-mobile md:px-gutter pb-stack-lg">
-            <div class="border border-outline-variant/40 bg-surface-container-lowest p-6">
-                <p class="font-label-caps text-label-caps text-secondary uppercase">SECTION 02 // WORKING METHOD</p>
-                <p class="font-body-lg text-body-lg text-primary mt-3 max-w-[760px]">
-                    문제 정의, 데이터 흐름 설계, 구현 지시, 테스트, 오류 재현, 문서화를 통해 AI Coding Agent 기반 프로토타입을 검증합니다.
-                </p>
+        <section id="process" class="bg-surface-container-low border-y border-outline-variant/30">
+            <div class="max-w-[1200px] mx-auto px-margin-mobile md:px-gutter py-section-gap">
+                <span class="font-label-caps text-label-caps text-secondary uppercase">SECTION 02 // WORKING METHOD</span>
+                <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mt-3 max-w-[760px]">
+                    코드를 숨기지 않고, 문제 정의와 검증 과정을 전면에 둡니다.
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-stack-lg">
+                    <div class="border border-outline-variant/40 bg-surface-container-lowest p-6">
+                        <p class="font-label-caps text-label-caps text-secondary uppercase">01 // Define</p>
+                        <h3 class="font-headline-sm text-headline-sm text-primary mt-3">문제와 흐름 정리</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-3">현장의 병목, 사용자 흐름, 데이터 흐름을 먼저 정리하고 구현 지시로 바꿉니다.</p>
+                    </div>
+                    <div class="border border-outline-variant/40 bg-surface-container-lowest p-6">
+                        <p class="font-label-caps text-label-caps text-secondary uppercase">02 // Build</p>
+                        <h3 class="font-headline-sm text-headline-sm text-primary mt-3">Agent 기반 구현</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-3">AI Coding Agent에게 요구사항과 제약을 전달하고 작동 가능한 프로토타입으로 만듭니다.</p>
+                    </div>
+                    <div class="border border-outline-variant/40 bg-surface-container-lowest p-6">
+                        <p class="font-label-caps text-label-caps text-secondary uppercase">03 // Verify</p>
+                        <h3 class="font-headline-sm text-headline-sm text-primary mt-3">검증과 개선</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-3">오류를 재현하고 수정 방향을 정리하며 한계와 개선 지점을 문서화합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="stack" class="max-w-[1200px] mx-auto px-margin-mobile md:px-gutter py-section-gap">
+            <div class="border-b border-outline-variant/40 pb-4 mb-stack-lg">
+                <span class="font-label-caps text-label-caps text-secondary uppercase">SECTION 03 // STACK</span>
+                <h2 class="font-headline-md text-headline-md text-primary mt-2">Tools and Patterns</h2>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">PYTHON</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">LANGCHAIN</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">RAG</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">CREWAI</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">MULTI-AGENT</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">OBSIDIAN</span>
+                <span class="bg-surface-container-low px-3 py-1 font-label-caps text-[10px] text-on-surface-variant border border-outline-variant/30">AI CODING AGENT</span>
             </div>
         </section>
         <section id="implementation-note" class="max-w-[1200px] mx-auto px-margin-mobile md:px-gutter pb-section-gap">
-            <div class="border border-outline-variant/40 bg-surface-container-lowest p-6">
+            <div class="border border-outline-variant/40 bg-surface-container-lowest p-6 md:p-8">
                 <p class="font-label-caps text-label-caps text-secondary uppercase">Implementation Note</p>
                 <p class="font-body-lg text-body-lg text-primary mt-3 max-w-[820px]">
-                    본 프로젝트는 AI Coding Agent의 도움을 받아 구현하며, 문제 정의와 결과 검증을 중심으로 작업합니다.
+                    본 포트폴리오의 프로젝트들은 AI Coding Agent의 도움을 받아 구현했습니다. 저는 문제 정의, 제품 흐름 설계, 데이터 흐름 설계, 구현 지시, 테스트, 오류 재현, 수정 방향 정리, 문서화를 담당했습니다.
                 </p>
             </div>
         </section>
@@ -382,15 +414,12 @@
                 Jaehyuk Song // AI PoC Builder
             </div>
             <div class="font-label-caps text-label-caps text-on-surface-variant flex gap-stack-md order-3 md:order-2">
-                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors" href="#">GITHUB</a>
-                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors"
-                    href="#">LINKEDIN</a>
-                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors" href="#">RESUME</a>
-                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors"
-                    href="#">PRIVACY</a>
+                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors" href="#projects">PROJECTS</a>
+                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors" href="#process">PROCESS</a>
+                <a class="hover:text-secondary underline-offset-4 hover:underline transition-colors" href="#implementation-note">NOTE</a>
             </div>
             <div class="font-label-caps text-label-caps text-on-surface-variant/60 order-2 md:order-3">
-                © 2024 AI POC BUILDER. SYSTEM ARCHITECT PORTFOLIO.
+                © 2026 AI POC BUILDER. STATIC PORTFOLIO.
             </div>
         </div>
     </footer>
@@ -640,18 +669,6 @@
                 const newWidth = Math.floor(Math.random() * (95 - 75 + 1) + 75);
                 bar.style.width = newWidth + '%';
             }, 4000);
-        });
-
-        // Simple smooth scroll for navigation
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                // This is a placeholder since we don't have all sections
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
         });
     </script>
 </body>
