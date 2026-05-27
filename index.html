@@ -543,6 +543,31 @@
             }
         }
 
+        function getModalFocusableElements() {
+            return [...projectModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+                .filter((element) => !element.disabled && element.offsetParent !== null);
+        }
+
+        function trapModalFocus(event) {
+            if (event.key !== 'Tab' || projectModal.getAttribute('aria-hidden') === 'true') return;
+            const focusableElements = getModalFocusableElements();
+            if (focusableElements.length === 0) return;
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            if (event.shiftKey && document.activeElement === firstElement) {
+                event.preventDefault();
+                lastElement.focus();
+                return;
+            }
+
+            if (!event.shiftKey && document.activeElement === lastElement) {
+                event.preventDefault();
+                firstElement.focus();
+            }
+        }
+
         document.querySelectorAll('[data-project-card]').forEach((card) => {
             card.addEventListener('click', () => {
                 openProjectModal(card.dataset.projectId, card);
@@ -560,7 +585,9 @@
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && projectModal.getAttribute('aria-hidden') === 'false') {
                 closeProjectModal();
+                return;
             }
+            trapModalFocus(event);
         });
 
         modalGalleryThumbnails.addEventListener('click', (event) => {

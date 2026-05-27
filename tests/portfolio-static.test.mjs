@@ -95,4 +95,9 @@ test('Edge Case: modal close paths are wired', () => {
   assert.match(html, /projectModal\.addEventListener\('click'/);
   assert.match(html, /event\.target === projectModal/);
   assert.match(html, /lastFocusedCard\.focus\(\)/);
+  assert.match(html, /function getModalFocusableElements\(\)/);
+  assert.match(html, /function trapModalFocus\(event\)/);
+  assert.match(html, /event\.key !== 'Tab'/);
+  assert.match(html, /event\.shiftKey/);
+  assert.match(html, /trapModalFocus\(event\)/);
 });
