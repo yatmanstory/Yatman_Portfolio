@@ -7,7 +7,6 @@ Test Plan:
    - Light-only theme constraints prevent dark-mode rendering.
    - Modal close paths are wired for close button, Escape key, and overlay click.
    - Responsive classes keep the hero, card grid, modal, and gallery usable on mobile and desktop.
-   - Internal navigation resolves to unique anchor targets with sticky-header scroll offsets.
 
 3. Failure Path:
    - Image fallback handling preserves layout and meaningful alt text when an image fails to load.
@@ -116,14 +115,18 @@ test('Edge Case: modal close paths are wired', () => {
 });
 
 test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
-  assert.match(html, /text-\[clamp\(36px,6vw,64px\)\]/);
+  assert.match(html, /text-\[36px\] md:text-\[56px\] lg:text-\[64px\]/);
   assert.match(html, /grid-cols-1 md:grid-cols-2 xl:grid-cols-4/);
   assert.match(html, /grid-cols-1 lg:grid-cols-12/);
   assert.match(html, /max-h-\[calc\(100vh-48px\)\] overflow-y-auto/);
   assert.match(html, /px-margin-mobile md:px-gutter/);
+  assert.match(html, /min-h-20 py-3/);
+  assert.match(html, /max-w-\[52vw\] md:max-w-none/);
+  assert.doesNotMatch(html, /letterSpacing":\s*"-/);
+  assert.doesNotMatch(html, /tracking-tighter|tracking-tight|tracking-widest/);
 });
 
-test('Edge Case: internal navigation anchors are complete and offset for sticky header', () => {
+test('Static Contract: internal navigation anchors are complete and offset for sticky header', () => {
   const requiredSectionIds = ['projects', 'process', 'stack', 'implementation-note'];
   const idMatches = [...html.matchAll(/\sid="([^"]+)"/g)];
   const ids = idMatches.map((match) => match[1]);
@@ -155,6 +158,8 @@ test('Failure Path: image fallback handling preserves layout', () => {
   assert.match(html, /onerror="handleImageError\(this\)"/);
   assert.match(html, /modalGalleryPreview\.classList\.remove\('opacity-0'\)/);
   assert.match(html, /previewFrame\.removeAttribute\('data-image-fallback'\)/);
+  assert.doesNotMatch(html, /googleusercontent\.com/);
+  assert.doesNotMatch(html, /<img\b[^>]*\ssrc="https?:\/\//);
 
   for (const project of projects) {
     for (const image of project.images) {
