@@ -167,6 +167,16 @@ test('Static Contract: CardChat gallery uses numbered images in filename order',
   }
 });
 
+test('Static Contract: modal preview opens the selected original image', () => {
+  assert.match(html, /id="modal-gallery-original-link"/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /rel="noopener"/);
+  assert.match(html, /id="modal-gallery-original-label"[\s\S]*?원본 보기/);
+  assert.match(html, /const modalGalleryOriginalLink = document\.getElementById\('modal-gallery-original-link'\)/);
+  assert.match(html, /modalGalleryOriginalLink\.href = image\.src/);
+  assert.match(html, /modalGalleryOriginalLink\.setAttribute\('aria-label', `\$\{image\.alt\} 원본 이미지 새 탭으로 보기`\)/);
+});
+
 test('Failure Path: image fallback handling preserves layout', () => {
   const projects = getProjects();
   assert.match(html, /function handleImageError\(image\)/);
