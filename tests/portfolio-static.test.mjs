@@ -151,6 +151,22 @@ test('Static Contract: internal navigation anchors are complete and offset for s
   assert.match(html, /© 2026 AI POC BUILDER\. STATIC PORTFOLIO\./);
 });
 
+test('Static Contract: CardChat gallery uses numbered images in filename order', () => {
+  const cardProject = getProjects().find((project) => project.id === 'card-rag');
+  const expectedImages = ['1.png', '2.png', '3.png', '4.png', '5.png', '6.png']
+    .map((filename) => `Card_Chat/${filename}`);
+  const cardMatch = html.match(/<button\s+type="button"\s+data-project-card\s+data-project-id="card-rag"[\s\S]*?<\/button>/);
+
+  assert.ok(cardProject, 'card-rag project should exist');
+  assert.ok(cardMatch, 'card-rag project card should exist');
+  assert.deepEqual(cardProject.images.map((image) => image.src), expectedImages);
+  assert.match(cardMatch[0], /<img\s+src="Card_Chat\/1\.png"/);
+
+  for (const imagePath of expectedImages) {
+    assert.ok(assetExists(imagePath), `${imagePath} should exist`);
+  }
+});
+
 test('Failure Path: image fallback handling preserves layout', () => {
   const projects = getProjects();
   assert.match(html, /function handleImageError\(image\)/);
