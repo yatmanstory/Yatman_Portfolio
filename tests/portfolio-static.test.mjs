@@ -85,3 +85,14 @@ test('Happy Path: project data and cards cover all case studies', () => {
     }
   }
 });
+
+test('Edge Case: modal close paths are wired', () => {
+  assert.match(html, /id="project-modal"/);
+  assert.match(html, /data-modal-close/);
+  assert.match(html, /const projectModal = document\.getElementById\('project-modal'\)/);
+  assert.match(html, /document\.addEventListener\('keydown'/);
+  assert.match(html, /event\.key === 'Escape'/);
+  assert.match(html, /projectModal\.addEventListener\('click'/);
+  assert.match(html, /event\.target === projectModal/);
+  assert.match(html, /lastFocusedCard\.focus\(\)/);
+});

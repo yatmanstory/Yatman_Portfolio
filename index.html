@@ -303,6 +303,57 @@
             </div>
         </section>
     </main>
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden bg-primary/50 px-4 py-6 md:p-8" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-title">
+        <div class="max-w-[1120px] mx-auto bg-surface-container-lowest border border-outline-variant max-h-[calc(100vh-48px)] overflow-y-auto">
+            <div class="sticky top-0 z-10 bg-surface-container-lowest/95 backdrop-blur-md border-b border-outline-variant/40 px-6 md:px-10 py-5 flex items-center justify-between gap-stack-md">
+                <div>
+                    <p id="modal-category" class="font-label-caps text-label-caps text-secondary uppercase"></p>
+                    <h2 id="modal-title" class="font-headline-md text-headline-md text-primary mt-1"></h2>
+                </div>
+                <button type="button" data-modal-close class="w-10 h-10 border border-outline-variant text-primary hover:bg-surface-container-high transition-colors flex items-center justify-center" aria-label="프로젝트 상세 닫기">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter px-6 md:px-10 py-8 md:py-10">
+                <div class="lg:col-span-5 flex flex-col gap-stack-md">
+                    <p id="modal-summary" class="font-body-lg text-body-lg text-on-surface-variant"></p>
+
+                    <div>
+                        <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">Problem</h3>
+                        <p id="modal-problem" class="font-body-md text-body-md text-on-surface-variant"></p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">My Role</h3>
+                        <p id="modal-role" class="font-body-md text-body-md text-on-surface-variant"></p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">Core Implementation</h3>
+                        <ul id="modal-implementation" class="space-y-2 font-body-md text-body-md text-on-surface-variant"></ul>
+                    </div>
+
+                    <div>
+                        <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">Result / Learning</h3>
+                        <p id="modal-outcome" class="font-body-md text-body-md text-on-surface-variant"></p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">Limits & Improvements</h3>
+                        <p id="modal-limits" class="font-body-md text-body-md text-on-surface-variant"></p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div data-image-frame class="bg-surface-container border border-outline-variant/50 aspect-[16/10] overflow-hidden">
+                        <img id="modal-gallery-preview" src="" alt="" onerror="handleImageError(this)" class="w-full h-full object-contain bg-surface-container-low">
+                    </div>
+                    <div id="modal-gallery-thumbnails" class="grid grid-cols-3 md:grid-cols-4 gap-3 mt-stack-md"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Footer -->
     <footer class="w-full py-stack-lg border-t border-outline-variant/20 bg-background">
         <div
@@ -421,9 +472,108 @@
             }
         ];
 
+        const projectById = new Map(projects.map((project) => [project.id, project]));
+        const projectModal = document.getElementById('project-modal');
+        const modalCloseButton = projectModal.querySelector('[data-modal-close]');
+        const modalTitle = document.getElementById('modal-title');
+        const modalCategory = document.getElementById('modal-category');
+        const modalSummary = document.getElementById('modal-summary');
+        const modalProblem = document.getElementById('modal-problem');
+        const modalRole = document.getElementById('modal-role');
+        const modalImplementation = document.getElementById('modal-implementation');
+        const modalOutcome = document.getElementById('modal-outcome');
+        const modalLimits = document.getElementById('modal-limits');
+        const modalGalleryPreview = document.getElementById('modal-gallery-preview');
+        const modalGalleryThumbnails = document.getElementById('modal-gallery-thumbnails');
+        let activeProject = null;
+        let lastFocusedCard = null;
+
+        function setText(element, value) {
+            element.textContent = value;
+        }
+
+        function setGalleryImage(image) {
+            modalGalleryPreview.src = image.src;
+            modalGalleryPreview.alt = image.alt;
+        }
+
+        function renderProject(project) {
+            activeProject = project;
+            setText(modalTitle, project.title);
+            setText(modalCategory, project.category);
+            setText(modalSummary, project.summary);
+            setText(modalProblem, project.problem);
+            setText(modalRole, project.role);
+            setText(modalOutcome, project.outcome);
+            setText(modalLimits, project.limits);
+
+            modalImplementation.innerHTML = project.implementation
+                .map((item) => `<li class="flex gap-3"><span class="text-secondary">/</span><span>${item}</span></li>`)
+                .join('');
+
+            setGalleryImage(project.images[0]);
+            modalGalleryThumbnails.innerHTML = project.images
+                .map((image, index) => `
+                    <button type="button" class="border border-outline-variant/50 bg-surface-container-low hover:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary" data-image-index="${index}" aria-label="${image.alt}">
+                        <span data-image-frame class="block aspect-[4/3] overflow-hidden">
+                            <img src="${image.src}" alt="${image.alt}" onerror="handleImageError(this)" class="w-full h-full object-cover">
+                        </span>
+                    </button>
+                `)
+                .join('');
+        }
+
+        function openProjectModal(projectId, trigger) {
+            const project = projectById.get(projectId);
+            if (!project) return;
+            lastFocusedCard = trigger;
+            renderProject(project);
+            projectModal.classList.remove('hidden');
+            projectModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('overflow-hidden');
+            modalCloseButton.focus();
+        }
+
+        function closeProjectModal() {
+            projectModal.classList.add('hidden');
+            projectModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('overflow-hidden');
+            if (lastFocusedCard) {
+                lastFocusedCard.focus();
+            }
+        }
+
+        document.querySelectorAll('[data-project-card]').forEach((card) => {
+            card.addEventListener('click', () => {
+                openProjectModal(card.dataset.projectId, card);
+            });
+        });
+
+        modalCloseButton.addEventListener('click', closeProjectModal);
+
+        projectModal.addEventListener('click', (event) => {
+            if (event.target === projectModal) {
+                closeProjectModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && projectModal.getAttribute('aria-hidden') === 'false') {
+                closeProjectModal();
+            }
+        });
+
+        modalGalleryThumbnails.addEventListener('click', (event) => {
+            const thumbnail = event.target.closest('[data-image-index]');
+            if (!thumbnail || !activeProject) return;
+            setGalleryImage(activeProject.images[Number(thumbnail.dataset.imageIndex)]);
+        });
+
         // Micro-interaction for the loading bar in the hero section
         window.addEventListener('DOMContentLoaded', () => {
             const bar = document.getElementById('progress-bar');
+            if (!bar) return;
+
             setTimeout(() => {
                 bar.style.width = '85%';
             }, 500);
