@@ -13,7 +13,7 @@ Test Plan:
 */
 
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import test from 'node:test';
 import vm from 'node:vm';
 
@@ -151,16 +151,33 @@ test('Static Contract: internal navigation anchors are complete and offset for s
   assert.match(html, /© 2026 AI POC BUILDER\. STATIC PORTFOLIO\./);
 });
 
+test('Static Contract: image references use optimized WebP assets', () => {
+  const projects = getProjects();
+  const imageRefs = [
+    ...[...html.matchAll(/<img\b[^>]*\ssrc="([^"]+)"/g)].map((match) => match[1]),
+    ...projects.flatMap((project) => project.images.map((image) => image.src)),
+  ].filter((src) => src && !src.startsWith('${'));
+
+  assert.ok(imageRefs.length >= 20, 'Portfolio should include all project gallery image references');
+  assert.doesNotMatch(html, /\.(png|jpe?g)/i, 'Portfolio HTML should not reference heavy raster originals');
+
+  for (const imagePath of new Set(imageRefs)) {
+    assert.match(imagePath, /^assets\/images\/[a-z0-9-]+\.webp$/, `${imagePath} should use an optimized asset path`);
+    assert.ok(assetExists(imagePath), `${imagePath} should exist`);
+    assert.ok(statSync(new URL(`../${imagePath}`, import.meta.url)).size < 900 * 1024, `${imagePath} should stay under 900KB`);
+  }
+});
+
 test('Static Contract: CardChat gallery uses numbered images in filename order', () => {
   const cardProject = getProjects().find((project) => project.id === 'card-rag');
-  const expectedImages = ['1.png', '2.png', '3.png', '4.png', '5.png', '6.png']
-    .map((filename) => `Card_Chat/${filename}`);
+  const expectedImages = ['01', '02', '03', '04', '05', '06']
+    .map((number) => `assets/images/cardchat-${number}.webp`);
   const cardMatch = html.match(/<button\s+type="button"\s+data-project-card\s+data-project-id="card-rag"[\s\S]*?<\/button>/);
 
   assert.ok(cardProject, 'card-rag project should exist');
   assert.ok(cardMatch, 'card-rag project card should exist');
   assert.deepEqual(cardProject.images.map((image) => image.src), expectedImages);
-  assert.match(cardMatch[0], /<img\s+src="Card_Chat\/1\.png"/);
+  assert.match(cardMatch[0], /<img\s+src="assets\/images\/cardchat-01\.webp"/);
 
   for (const imagePath of expectedImages) {
     assert.ok(assetExists(imagePath), `${imagePath} should exist`);

@@ -1,3 +1,10 @@
 .DS_Store
 .superpowers/
 User attachment.png
+
+# Keep original screenshots local; publish optimized WebP assets from assets/images/.
+Main_image.png
+Card_Chat/
+CrewAI_Project/
+DashBoard_Project/
+Obsidian_Orchestration/
