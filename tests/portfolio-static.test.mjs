@@ -101,3 +101,24 @@ test('Edge Case: modal close paths are wired', () => {
   assert.match(html, /event\.shiftKey/);
   assert.match(html, /trapModalFocus\(event\)/);
 });
+
+test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
+  assert.match(html, /text-\[clamp\(36px,6vw,64px\)\]/);
+  assert.match(html, /grid-cols-1 md:grid-cols-2 xl:grid-cols-4/);
+  assert.match(html, /grid-cols-1 lg:grid-cols-12/);
+  assert.match(html, /max-h-\[calc\(100vh-48px\)\] overflow-y-auto/);
+  assert.match(html, /px-margin-mobile md:px-gutter/);
+});
+
+test('Failure Path: image fallback handling preserves layout', () => {
+  const projects = getProjects();
+  assert.match(html, /function handleImageError\(image\)/);
+  assert.match(html, /frame\.setAttribute\('data-image-fallback', 'true'\)/);
+  assert.match(html, /onerror="handleImageError\(this\)"/);
+
+  for (const project of projects) {
+    for (const image of project.images) {
+      assert.ok(image.alt.length >= 12, `${image.src} should keep useful fallback text`);
+    }
+  }
+});
