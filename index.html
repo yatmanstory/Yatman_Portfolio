@@ -518,8 +518,13 @@
         }
 
         function setGalleryImage(image) {
-            modalGalleryPreview.src = image.src;
+            const previewFrame = modalGalleryPreview.closest('[data-image-frame]');
+            if (previewFrame) {
+                previewFrame.removeAttribute('data-image-fallback');
+            }
+            modalGalleryPreview.classList.remove('opacity-0');
             modalGalleryPreview.alt = image.alt;
+            modalGalleryPreview.src = image.src;
         }
 
         function renderProject(project) {

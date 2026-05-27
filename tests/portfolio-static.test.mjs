@@ -115,6 +115,8 @@ test('Failure Path: image fallback handling preserves layout', () => {
   assert.match(html, /function handleImageError\(image\)/);
   assert.match(html, /frame\.setAttribute\('data-image-fallback', 'true'\)/);
   assert.match(html, /onerror="handleImageError\(this\)"/);
+  assert.match(html, /modalGalleryPreview\.classList\.remove\('opacity-0'\)/);
+  assert.match(html, /previewFrame\.removeAttribute\('data-image-fallback'\)/);
 
   for (const project of projects) {
     for (const image of project.images) {
