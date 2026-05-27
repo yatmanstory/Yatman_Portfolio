@@ -324,6 +324,10 @@
         </div>
     </footer>
     <script>
+        function handleImageError(image) {
+            image.alt = image.alt || '프로젝트 이미지를 불러오지 못했습니다.';
+        }
+
         const projects = [
             {
                 id: 'dashboard',
