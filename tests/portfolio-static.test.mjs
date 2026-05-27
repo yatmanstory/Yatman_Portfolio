@@ -7,6 +7,7 @@ Test Plan:
    - Light-only theme constraints prevent dark-mode rendering.
    - Modal close paths are wired for close button, Escape key, and overlay click.
    - Responsive classes keep the hero, card grid, modal, and gallery usable on mobile and desktop.
+   - Internal navigation resolves to unique anchor targets with sticky-header scroll offsets.
 
 3. Failure Path:
    - Image fallback handling preserves layout and meaningful alt text when an image fails to load.
@@ -37,6 +38,18 @@ function getProjects() {
 
 function assetExists(src) {
   return existsSync(new URL(`../${src}`, import.meta.url));
+}
+
+function parseAttributes(tag) {
+  return Object.fromEntries(
+    [...tag.matchAll(/\s([\w:-]+)="([^"]*)"/g)].map((match) => [match[1], match[2]]),
+  );
+}
+
+function getSectionById(id) {
+  return [...html.matchAll(/<section\b[^>]*>/g)]
+    .map((match) => match[0])
+    .find((tag) => parseAttributes(tag).id === id);
 }
 
 test('Happy Path: project data and cards cover all case studies', () => {
@@ -108,6 +121,31 @@ test('Edge Case: responsive structure is encoded for mobile and desktop', () => 
   assert.match(html, /grid-cols-1 lg:grid-cols-12/);
   assert.match(html, /max-h-\[calc\(100vh-48px\)\] overflow-y-auto/);
   assert.match(html, /px-margin-mobile md:px-gutter/);
+});
+
+test('Edge Case: internal navigation anchors are complete and offset for sticky header', () => {
+  const requiredSectionIds = ['projects', 'process', 'stack', 'implementation-note'];
+  const idMatches = [...html.matchAll(/\sid="([^"]+)"/g)];
+  const ids = idMatches.map((match) => match[1]);
+  const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+  const internalHrefMatches = [...html.matchAll(/\shref="#([^"]*)"/g)];
+  const internalTargets = internalHrefMatches.map((match) => match[1]);
+
+  assert.doesNotMatch(html, /\shref="#"/, 'HTML should not include placeholder href="#" links');
+  assert.deepEqual(duplicateIds, [], 'HTML should not include duplicate id attributes');
+
+  for (const target of internalTargets) {
+    assert.ok(ids.includes(target), `Internal link href="#${target}" should resolve to an existing id`);
+  }
+
+  for (const sectionId of requiredSectionIds) {
+    const section = getSectionById(sectionId);
+    assert.ok(ids.includes(sectionId), `Required section id="${sectionId}" should exist`);
+    assert.ok(section, `Required section id="${sectionId}" should be a section target`);
+    assert.match(parseAttributes(section).class ?? '', /\bscroll-mt-24\b/, `${sectionId} should offset sticky-header anchor scrolling`);
+  }
+
+  assert.match(html, /© 2026 AI POC BUILDER\. STATIC PORTFOLIO\./);
 });
 
 test('Failure Path: image fallback handling preserves layout', () => {
