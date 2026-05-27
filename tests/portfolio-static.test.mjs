@@ -91,7 +91,6 @@ test('Happy Path: project data and cards cover all case studies', () => {
     assert.ok(Array.isArray(project.implementation));
     assert.ok(project.implementation.length >= 3);
     assert.equal(typeof project.outcome, 'string');
-    assert.equal(typeof project.limits, 'string');
     assert.ok(Array.isArray(project.images));
     assert.ok(project.images.length >= 3);
 
@@ -116,6 +115,51 @@ test('Edge Case: modal close paths are wired', () => {
   assert.match(html, /event\.key !== 'Tab'/);
   assert.match(html, /event\.shiftKey/);
   assert.match(html, /trapModalFocus\(event\)/);
+  assert.doesNotMatch(html, /Limits & Improvements/);
+  assert.doesNotMatch(html, /modal-limits/);
+});
+
+test('Static Contract: approved dashboard and CardChat case copy is concise', () => {
+  const projects = getProjects();
+  const dashboard = projects.find((project) => project.id === 'dashboard');
+  const cardChat = projects.find((project) => project.id === 'card-rag');
+
+  assert.ok(dashboard, 'dashboard project should exist');
+  assert.equal(
+    dashboard.summary,
+    '상담원이 개인 PC에서 팀 KPI와 인입 현황을 바로 확인할 수 있도록 만든 내부 운영 대시보드입니다.',
+  );
+  assert.equal(
+    dashboard.problem,
+    'TV 화면에만 의존하던 인입 현황을 개인 업무 화면으로 옮겨, 대기 상황과 업무 집중도를 더 빠르게 파악할 수 있게 했습니다.',
+  );
+  assert.equal(
+    dashboard.role,
+    '문제 정의, 화면 흐름 설계, 데이터 구조 정리, AI Coding Agent 기반 구현 지시와 배포를 담당했습니다.',
+  );
+  assert.deepEqual(dashboard.implementation, [
+    '실시간 KPI와 상담 인입 현황 시각화',
+    '상담원별 생산성·통화 시간·휴식 지표 정리',
+    '이메일 응대 자동화로 반복 업무 형식 표준화',
+  ]);
+  assert.equal(
+    dashboard.outcome,
+    '운영 데이터가 팀 관리와 교육 기준으로 활용되었고, 담당 팀은 월별 KPI 기준 5개 팀 중 1위를 달성했습니다.',
+  );
+
+  assert.ok(cardChat, 'card-rag project should exist');
+  assert.equal(
+    cardChat.summary,
+    '카드 혜택 추천 품질을 높이기 위해 검색 전략을 조합하고, 모델 기반 평가로 반복 검증한 RAG 실험 프로젝트입니다.',
+  );
+  assert.deepEqual(cardChat.implementation, [
+    'BM25와 Dense Retriever를 결합한 하이브리드 검색 구조 설계',
+    'Cohere Rerank로 검색 문서를 관련도 높은 순서로 재정렬',
+    'HardFilter, Multi Query, RRF 가중치 기반 커스텀 검색 전략 비교',
+    '10개 페르소나와 반복 질의를 사용한 모델 기반 평가 구성',
+  ]);
+  assert.match(cardChat.outcome, /150회 단위의 모델 기반 평가/);
+  assert.match(cardChat.outcome, /검색 파이프라인 개선이 LLM 교체보다 추천 품질에 더 큰 영향을 줄 수 있음/);
 });
 
 test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
