@@ -32,7 +32,7 @@ test('Edge Case: light-only theme constraints are enforced', () => {
 function getProjects() {
   const match = html.match(/const projects = (\[[\s\S]*?\n\s*\]);/);
   assert.ok(match, 'index.html should define const projects = [...] for modal case studies');
-  return JSON.parse(JSON.stringify(vm.runInNewContext(match[1])));
+  return JSON.parse(JSON.stringify(vm.runInNewContext(match[1], {}, { timeout: 1000 })));
 }
 
 function assetExists(src) {
@@ -42,8 +42,25 @@ function assetExists(src) {
 test('Happy Path: project data and cards cover all case studies', () => {
   const projects = getProjects();
   const expectedIds = ['dashboard', 'card-rag', 'crewai', 'obsidian'];
+  const cardMatches = [...html.matchAll(/<button\s+type="button"\s+data-project-card\s+data-project-id="([^"]+)"[\s\S]*?<\/button>/g)];
+  const cardIds = cardMatches.map((match) => match[1]);
 
   assert.deepEqual(projects.map((project) => project.id), expectedIds);
+  assert.equal(cardMatches.length, 4);
+  assert.deepEqual(cardIds, expectedIds);
+  assert.deepEqual(cardIds, projects.map((project) => project.id));
+
+  for (const [index, cardMatch] of cardMatches.entries()) {
+    const cardHtml = cardMatch[0];
+    const srcMatch = cardHtml.match(/<img\s+src="([^"]+)"/);
+    const altMatch = cardHtml.match(/alt="([^"]+)"/);
+
+    assert.ok(srcMatch, `${cardIds[index]} card should have an image src`);
+    assert.ok(altMatch, `${cardIds[index]} card should have image alt text`);
+    assert.ok(assetExists(srcMatch[1]), `${srcMatch[1]} should exist`);
+    assert.ok(altMatch[1].length >= 12, `${cardIds[index]} card should have useful image alt text`);
+    assert.match(cardHtml, /onerror="handleImageError\(this\)"/);
+  }
 
   for (const project of projects) {
     assert.match(html, new RegExp(`data-project-id="${project.id}"`));
