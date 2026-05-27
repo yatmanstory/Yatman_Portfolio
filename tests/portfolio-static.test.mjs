@@ -22,6 +22,8 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 test('Edge Case: light-only theme constraints are enforced', () => {
   assert.match(html, /<html lang="ko">/);
   assert.match(html, /Jaehyuk Song \/\/ AI PoC Builder/);
+  assert.match(html, /I shape <span class="text-secondary">ideas<\/span> into systems that <span class="text-secondary">work<\/span>\./);
+  assert.match(html, /From real workflows to RAG and orchestration, I design the flow, guide the build, and validate what works\./);
   assert.match(html, /background-color:\s*#f7fafc;/);
   assert.doesNotMatch(html, /darkMode\s*:/);
   assert.doesNotMatch(html, /\bdark:/);
