@@ -218,14 +218,16 @@ test('Static Contract: image references use optimized WebP assets', () => {
 
 test('Static Contract: CardChat gallery uses numbered images in filename order', () => {
   const cardProject = getProjects().find((project) => project.id === 'card-rag');
-  const expectedImages = ['01', '02', '03', '04', '05', '06']
+  const expectedSlideImages = ['01', '02', '03', '04', '05', '06']
     .map((number) => `assets/images/cardchat-${number}.webp`);
+  const expectedImages = ['assets/images/cardchat-app-demo.webp', ...expectedSlideImages];
   const cardMatch = html.match(/<button\s+type="button"\s+data-project-card\s+data-project-id="card-rag"[\s\S]*?<\/button>/);
 
   assert.ok(cardProject, 'card-rag project should exist');
   assert.ok(cardMatch, 'card-rag project card should exist');
   assert.deepEqual(cardProject.images.map((image) => image.src), expectedImages);
-  assert.match(cardMatch[0], /<img\s+src="assets\/images\/cardchat-01\.webp"/);
+  assert.match(cardMatch[0], /<img\s+src="assets\/images\/cardchat-app-demo\.webp"/);
+  assert.match(cardProject.images[0].alt, /실제 앱/);
 
   for (const imagePath of expectedImages) {
     assert.ok(assetExists(imagePath), `${imagePath} should exist`);
