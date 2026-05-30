@@ -41,6 +41,29 @@ function assetExists(src) {
   return existsSync(new URL(`../${src}`, import.meta.url));
 }
 
+function readWebpDimensions(src) {
+  const buffer = readFileSync(new URL(`../${src}`, import.meta.url));
+  assert.equal(buffer.toString('ascii', 0, 4), 'RIFF', `${src} should be a RIFF WebP file`);
+  assert.equal(buffer.toString('ascii', 8, 12), 'WEBP', `${src} should be a WebP file`);
+  const chunkType = buffer.toString('ascii', 12, 16);
+
+  if (chunkType === 'VP8X') {
+    return {
+      width: 1 + buffer.readUIntLE(24, 3),
+      height: 1 + buffer.readUIntLE(27, 3),
+    };
+  }
+
+  if (chunkType === 'VP8 ') {
+    return {
+      width: buffer.readUInt16LE(26) & 0x3fff,
+      height: buffer.readUInt16LE(28) & 0x3fff,
+    };
+  }
+
+  assert.fail(`${src} should expose VP8X or VP8 image dimensions`);
+}
+
 function parseAttributes(tag) {
   return Object.fromEntries(
     [...tag.matchAll(/\s([\w:-]+)="([^"]*)"/g)].map((match) => [match[1], match[2]]),
@@ -193,6 +216,18 @@ test('Static Contract: approved CrewAI case copy and login image are applied', (
     crewai.outcome,
     '프레임워크 중심의 Multi-Agent 구성을 사용자가 조작 가능한 SaaS형 Builder 흐름으로 풀어냈습니다. Agent 실행보다 중요한 것은 구성 요소, 실행 조건, 결과 상태를 명확히 분리하는 구조라는 점을 확인했습니다.',
   );
+});
+
+test('Static Contract: CrewAI screenshots are cropped consistently', () => {
+  const crewai = getProjects().find((project) => project.id === 'crewai');
+  const crewaiImages = [...new Set(crewai.images.map((image) => image.src))];
+
+  assert.equal(crewaiImages.length, 10);
+
+  for (const imagePath of crewaiImages) {
+    assert.match(imagePath, /^assets\/images\/crewai-\d{2}\.webp$/);
+    assert.deepEqual(readWebpDimensions(imagePath), { width: 3838, height: 1760 });
+  }
 });
 
 test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
