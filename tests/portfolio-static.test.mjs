@@ -218,6 +218,31 @@ test('Static Contract: approved CrewAI case copy and login image are applied', (
   );
 });
 
+test('Static Contract: approved Obsidian summary is applied', () => {
+  const obsidian = getProjects().find((project) => project.id === 'obsidian');
+  const obsidianCard = html.match(/<button\s+type="button"\s+data-project-card\s+data-project-id="obsidian"[\s\S]*?<\/button>/);
+
+  assert.ok(obsidian, 'obsidian project should exist');
+  assert.ok(obsidianCard, 'obsidian card should exist');
+  assert.match(obsidianCard[0], /<img src="assets\/images\/obsidian-hero\.webp"/);
+  assert.match(obsidianCard[0], /alt="Go 기반 멀티 에이전트 AI 오케스트레이션 시스템 구조도"/);
+  assert.equal(obsidian.images[0].src, 'assets/images/obsidian-hero.webp');
+  assert.equal(obsidian.images[0].alt, 'Go 기반 멀티 에이전트 AI 오케스트레이션 시스템 구조도');
+  assert.deepEqual(obsidian.images.map((image) => image.src), [
+    'assets/images/obsidian-hero.webp',
+    'assets/images/obsidian-01.webp',
+    'assets/images/obsidian-02.webp',
+    'assets/images/obsidian-chat-ui.webp',
+    'assets/images/obsidian-05.webp',
+    'assets/images/obsidian-chat-ui-detail.webp',
+    'assets/images/obsidian-06.webp',
+  ]);
+  assert.equal(
+    obsidian.summary,
+    '흩어진 맥락을 정리하고, Agent가 참고할 수 있는 작업 지식 시스템을 설계하고 있습니다.',
+  );
+});
+
 test('Static Contract: CrewAI screenshots are cropped consistently', () => {
   const crewai = getProjects().find((project) => project.id === 'crewai');
   const crewaiImages = [...new Set(crewai.images.map((image) => image.src))];
