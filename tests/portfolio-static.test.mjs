@@ -193,9 +193,9 @@ test('Static Contract: approved CrewAI case copy and login image are applied', (
 
   assert.ok(crewai, 'crewai project should exist');
   assert.ok(crewaiCard, 'crewai card should exist');
-  assert.match(crewaiCard[0], /<img src="assets\/images\/crewai-10\.webp"/);
+  assert.match(crewaiCard[0], /<img src="assets\/images\/crewai-crop-10\.webp"/);
   assert.match(crewaiCard[0], /alt="CrewAI 로그인 홈 화면"/);
-  assert.equal(crewai.images[0].src, 'assets/images/crewai-10.webp');
+  assert.equal(crewai.images[0].src, 'assets/images/crewai-crop-10.webp');
   assert.equal(crewai.images[0].alt, 'CrewAI 로그인 홈 화면');
   assert.equal(crewai.title, 'CrewAI 기반 Multi-Agent Workflow Builder');
   assert.equal(
@@ -225,9 +225,11 @@ test('Static Contract: CrewAI screenshots are cropped consistently', () => {
   assert.equal(crewaiImages.length, 10);
 
   for (const imagePath of crewaiImages) {
-    assert.match(imagePath, /^assets\/images\/crewai-\d{2}\.webp$/);
+    assert.match(imagePath, /^assets\/images\/crewai-crop-\d{2}\.webp$/);
     assert.deepEqual(readWebpDimensions(imagePath), { width: 3838, height: 1760 });
   }
+
+  assert.doesNotMatch(html, /assets\/images\/crewai-\d{2}\.webp/);
 });
 
 test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
