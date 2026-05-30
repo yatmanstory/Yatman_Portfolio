@@ -269,12 +269,15 @@ test('Edge Case: responsive structure is encoded for mobile and desktop', () => 
   assert.match(html, /max-w-\[52vw\] md:max-w-none/);
   assert.match(html, /function scrollMobileFirstVisitToProjects\(\)/);
   assert.match(html, /window\.matchMedia\('\(max-width: 767px\)'\)\.matches/);
+  assert.match(html, /<script id="early-scroll-control">/);
+  assert.match(html, /history\.scrollRestoration = 'manual';/);
   assert.match(html, /history\.scrollRestoration = 'manual'/);
-  assert.match(html, /projectsSection\.scrollIntoView\(\{ block: 'start' \}\)/);
+  assert.match(html, /const targetTop = Math\.max\(projectsSection\.offsetTop - headerHeight, 0\)/);
+  assert.match(html, /window\.scrollTo\(\{ top: targetTop, left: 0, behavior: 'auto' \}\)/);
   assert.match(html, /function scheduleMobileFirstVisitScroll\(\)/);
   assert.match(html, /window\.addEventListener\('pageshow', scheduleMobileFirstVisitScroll\)/);
   assert.match(html, /window\.addEventListener\('load', scheduleMobileFirstVisitScroll\)/);
-  assert.match(html, /\[0, 150, 600\]\.forEach/);
+  assert.match(html, /\[0, 100, 300, 800, 1500, 3000\]\.forEach/);
   assert.doesNotMatch(html, /letterSpacing":\s*"-/);
   assert.doesNotMatch(html, /tracking-tighter|tracking-tight|tracking-widest/);
 });

@@ -5,6 +5,11 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Jaehyuk Song // AI PoC Builder - Portfolio</title>
+    <script id="early-scroll-control">
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@600&amp;display=swap"
@@ -756,7 +761,9 @@
             if (!projectsSection) return;
 
             requestAnimationFrame(() => {
-                projectsSection.scrollIntoView({ block: 'start' });
+                const headerHeight = document.querySelector('header')?.offsetHeight ?? 0;
+                const targetTop = Math.max(projectsSection.offsetTop - headerHeight, 0);
+                window.scrollTo({ top: targetTop, left: 0, behavior: 'auto' });
             });
         }
 
@@ -764,7 +771,7 @@
             if (window.location.hash) return;
             if (!window.matchMedia('(max-width: 767px)').matches) return;
 
-            [0, 150, 600].forEach((delay) => {
+            [0, 100, 300, 800, 1500, 3000].forEach((delay) => {
                 setTimeout(scrollMobileFirstVisitToProjects, delay);
             });
         }
