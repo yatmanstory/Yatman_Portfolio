@@ -232,13 +232,13 @@ test('Static Contract: approved Obsidian summary is applied', () => {
     'assets/images/obsidian-hero.webp',
     'assets/images/obsidian-01.webp',
     'assets/images/obsidian-02.webp',
-    'assets/images/obsidian-chat-ui.webp',
+    'assets/images/obsidian-chat-ui-src-03.webp',
     'assets/images/obsidian-05.webp',
-    'assets/images/obsidian-chat-ui-detail.webp',
+    'assets/images/obsidian-chat-ui-src-05.webp',
     'assets/images/obsidian-06.webp',
   ]);
-  assert.deepEqual(readWebpDimensions('assets/images/obsidian-chat-ui.webp'), { width: 1100, height: 1660 });
-  assert.deepEqual(readWebpDimensions('assets/images/obsidian-chat-ui-detail.webp'), { width: 1100, height: 1660 });
+  assert.deepEqual(readWebpDimensions('assets/images/obsidian-chat-ui-src-03.webp'), { width: 1100, height: 1660 });
+  assert.deepEqual(readWebpDimensions('assets/images/obsidian-chat-ui-src-05.webp'), { width: 1100, height: 1660 });
   assert.equal(
     obsidian.summary,
     '흩어진 맥락을 정리하고, Agent가 참고할 수 있는 작업 지식 시스템을 설계하고 있습니다.',
