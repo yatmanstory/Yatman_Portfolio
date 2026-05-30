@@ -320,8 +320,8 @@
                     class="project-card group flex h-full flex-col text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-4">
                     <span data-image-frame
                         class="block aspect-[4/3] bg-surface-container overflow-hidden mb-stack-sm border border-outline-variant/40">
-                        <img src="assets/images/crewai-01.webp"
-                            alt="CrewAI Agent Profile 관리 화면" onerror="handleImageError(this)"
+                        <img src="assets/images/crewai-10.webp"
+                            alt="CrewAI 로그인 홈 화면" onerror="handleImageError(this)"
                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105">
                     </span>
                     <span class="font-label-caps text-label-caps text-secondary uppercase">MULTI-AGENT / BUILDER</span>
@@ -441,8 +441,6 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter px-6 md:px-10 py-8 md:py-10">
                 <div class="lg:col-span-5 flex flex-col gap-stack-md">
-                    <p id="modal-summary" class="font-body-lg text-body-lg text-on-surface-variant"></p>
-
                     <div>
                         <h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2">Problem</h3>
                         <p id="modal-problem" class="font-body-md text-body-md text-on-surface-variant"></p>
@@ -568,19 +566,20 @@
             },
             {
                 id: 'crewai',
-                title: 'CrewAI 기반 Multi-Agent SaaS Wrapper',
+                title: 'CrewAI 기반 Multi-Agent Workflow Builder',
                 category: 'MULTI-AGENT / BUILDER',
-                summary: '사용자가 Agent Workflow를 구성하고 실행할 수 있도록 만든 SaaS형 Multi-Agent 오케스트레이션 프로토타입입니다.',
-                problem: 'CrewAI 같은 Agent 프레임워크는 강력하지만 일반 사용자가 직접 Agent, Task, Flow를 구성하고 실행하기에는 추상도가 높고 사용 흐름이 복잡했습니다.',
-                role: 'LLM 서비스 기획, Workflow 구성 요소 설계, Builder UX 흐름 설계, AI Coding Agent 기반 주요 프론트엔드 기능 및 백엔드 도메인 로직 구현을 담당했습니다.',
+                summary: 'Agent Workflow를 구성하고 실행하는 SaaS형 Multi-Agent Builder 프로토타입입니다.',
+                problem: 'CrewAI는 강력한 프레임워크지만, Agent·Task·Flow를 직접 정의하고 실행하려면 구조를 이해해야 해서 일반 사용자가 다루기 어렵습니다.',
+                role: 'Workflow 구성 방식 설계, Builder UX 흐름 정리, Agent·Task·Flow 관리 화면과 실행 흐름 구현 지시를 담당했습니다.',
                 implementation: [
-                    'Agent, Task 등 Workflow 구성 요소 CRUD',
-                    'React Flow 기반 Crew/Flow Builder',
-                    '편집 상태와 실행 상태를 분리한 Published Runtime Snapshot 구조'
+                    'Agent, Task, Crew, Flow 구성 요소 관리',
+                    'Builder 화면에서 Workflow를 조립하는 구조 설계',
+                    '실행 전 설정과 실행 결과를 분리한 운영 흐름 구성',
+                    'Tool, Credential, Knowledge 등 실행 자원 관리 화면 설계'
                 ],
-                outcome: '사용자가 직접 Agent Workflow를 구성하고 실행할 수 있는 SaaS형 오케스트레이션 플랫폼 구조를 프로토타입으로 구현했습니다.',
-                limits: '상용 SaaS가 아니라 프로토타입 수준입니다. 복잡한 Agent Workflow를 사용자 친화적인 Builder 구조로 바꾸려 한 시도에 초점을 둡니다.',
+                outcome: '프레임워크 중심의 Multi-Agent 구성을 사용자가 조작 가능한 SaaS형 Builder 흐름으로 풀어냈습니다. Agent 실행보다 중요한 것은 구성 요소, 실행 조건, 결과 상태를 명확히 분리하는 구조라는 점을 확인했습니다.',
                 images: [
+                    { src: 'assets/images/crewai-10.webp', alt: 'CrewAI 로그인 홈 화면' },
                     { src: 'assets/images/crewai-01.webp', alt: 'CrewAI Agent Profile 관리 화면' },
                     { src: 'assets/images/crewai-02.webp', alt: 'CrewAI Builder 상세 구성 화면' },
                     { src: 'assets/images/crewai-03.webp', alt: 'CrewAI Generated Tasks 화면' },
@@ -589,8 +588,7 @@
                     { src: 'assets/images/crewai-06.webp', alt: 'CrewAI Tool Nodes 화면' },
                     { src: 'assets/images/crewai-07.webp', alt: 'CrewAI Credentials 화면' },
                     { src: 'assets/images/crewai-08.webp', alt: 'CrewAI Knowledge 화면' },
-                    { src: 'assets/images/crewai-09.webp', alt: 'CrewAI 실행 설정 화면' },
-                    { src: 'assets/images/crewai-10.webp', alt: 'CrewAI 실행 결과 화면' }
+                    { src: 'assets/images/crewai-09.webp', alt: 'CrewAI 실행 설정 화면' }
                 ]
             },
             {
@@ -606,7 +604,6 @@
                     'Runtime, Middleware, 입출력 계약 설계'
                 ],
                 outcome: '현재 진행 중인 실험이며, 목표는 AI Coding Agent를 더 안정적으로 활용하기 위한 개발 문서화·실행 관리 구조를 만드는 것입니다.',
-                limits: '완성 프로젝트가 아니라 진행 중인 연구·실험 프로젝트입니다. 결과물보다 문제의식, 구조화 방식, 문서화 철학을 보여주는 용도로 활용합니다.',
                 images: [
                     { src: 'assets/images/obsidian-01.webp', alt: 'Obsidian AI Wiki 프로젝트 문서 구조 화면' },
                     { src: 'assets/images/obsidian-02.webp', alt: 'Obsidian Agent orchestration 설계 노트 화면' },
@@ -623,7 +620,6 @@
         const modalCloseButton = projectModal.querySelector('[data-modal-close]');
         const modalTitle = document.getElementById('modal-title');
         const modalCategory = document.getElementById('modal-category');
-        const modalSummary = document.getElementById('modal-summary');
         const modalProblem = document.getElementById('modal-problem');
         const modalRole = document.getElementById('modal-role');
         const modalImplementation = document.getElementById('modal-implementation');
@@ -654,7 +650,6 @@
             activeProject = project;
             setText(modalTitle, project.title);
             setText(modalCategory, project.category);
-            setText(modalSummary, project.summary);
             setText(modalProblem, project.problem);
             setText(modalRole, project.role);
             setText(modalOutcome, project.outcome);

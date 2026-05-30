@@ -117,6 +117,7 @@ test('Edge Case: modal close paths are wired', () => {
   assert.match(html, /trapModalFocus\(event\)/);
   assert.doesNotMatch(html, /Limits & Improvements/);
   assert.doesNotMatch(html, /modal-limits/);
+  assert.doesNotMatch(html, /modal-summary/);
 });
 
 test('Static Contract: approved dashboard and CardChat case copy is concise', () => {
@@ -160,6 +161,38 @@ test('Static Contract: approved dashboard and CardChat case copy is concise', ()
   ]);
   assert.match(cardChat.outcome, /150회 단위의 모델 기반 평가/);
   assert.match(cardChat.outcome, /검색 파이프라인 개선이 LLM 교체보다 추천 품질에 더 큰 영향을 줄 수 있음/);
+});
+
+test('Static Contract: approved CrewAI case copy and login image are applied', () => {
+  const projects = getProjects();
+  const crewai = projects.find((project) => project.id === 'crewai');
+  const crewaiCard = html.match(/<button\s+type="button"\s+data-project-card\s+data-project-id="crewai"[\s\S]*?<\/button>/);
+
+  assert.ok(crewai, 'crewai project should exist');
+  assert.ok(crewaiCard, 'crewai card should exist');
+  assert.match(crewaiCard[0], /<img src="assets\/images\/crewai-10\.webp"/);
+  assert.match(crewaiCard[0], /alt="CrewAI 로그인 홈 화면"/);
+  assert.equal(crewai.images[0].src, 'assets/images/crewai-10.webp');
+  assert.equal(crewai.images[0].alt, 'CrewAI 로그인 홈 화면');
+  assert.equal(crewai.title, 'CrewAI 기반 Multi-Agent Workflow Builder');
+  assert.equal(
+    crewai.problem,
+    'CrewAI는 강력한 프레임워크지만, Agent·Task·Flow를 직접 정의하고 실행하려면 구조를 이해해야 해서 일반 사용자가 다루기 어렵습니다.',
+  );
+  assert.equal(
+    crewai.role,
+    'Workflow 구성 방식 설계, Builder UX 흐름 정리, Agent·Task·Flow 관리 화면과 실행 흐름 구현 지시를 담당했습니다.',
+  );
+  assert.deepEqual(crewai.implementation, [
+    'Agent, Task, Crew, Flow 구성 요소 관리',
+    'Builder 화면에서 Workflow를 조립하는 구조 설계',
+    '실행 전 설정과 실행 결과를 분리한 운영 흐름 구성',
+    'Tool, Credential, Knowledge 등 실행 자원 관리 화면 설계',
+  ]);
+  assert.equal(
+    crewai.outcome,
+    '프레임워크 중심의 Multi-Agent 구성을 사용자가 조작 가능한 SaaS형 Builder 흐름으로 풀어냈습니다. Agent 실행보다 중요한 것은 구성 요소, 실행 조건, 결과 상태를 명확히 분리하는 구조라는 점을 확인했습니다.',
+  );
 });
 
 test('Edge Case: responsive structure is encoded for mobile and desktop', () => {
