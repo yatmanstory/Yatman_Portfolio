@@ -760,9 +760,21 @@
             });
         }
 
+        function scheduleMobileFirstVisitScroll() {
+            if (window.location.hash) return;
+            if (!window.matchMedia('(max-width: 767px)').matches) return;
+
+            [0, 150, 600].forEach((delay) => {
+                setTimeout(scrollMobileFirstVisitToProjects, delay);
+            });
+        }
+
+        window.addEventListener('pageshow', scheduleMobileFirstVisitScroll);
+        window.addEventListener('load', scheduleMobileFirstVisitScroll);
+
         // Micro-interaction for the loading bar in the hero section
         window.addEventListener('DOMContentLoaded', () => {
-            scrollMobileFirstVisitToProjects();
+            scheduleMobileFirstVisitScroll();
 
             const bar = document.getElementById('progress-bar');
             if (!bar) return;
